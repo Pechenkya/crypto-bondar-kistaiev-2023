@@ -45,8 +45,8 @@ int main()
 
     uint32_t N1_req = 222;
     uint32_t C1 = 71;
-    uint32_t N1_req = 229;
-    uint32_t C1 = 74;
+    uint32_t N2_req = 229;
+    uint32_t C2 = 74;
     //
 
     LFSR L1 = LFSR(L1_rec, L1_deg);
@@ -56,32 +56,35 @@ int main()
     //----- L1 -----
     uint32_t best_fit_L1_fill = 0;
     {
-        std::vector<std::pair<CycleQueue<uint8_t>, size_t>> candidates;
+        std::vector<std::pair<uint32_t, size_t>> candidates; // <candidate, R>
 
         uint64_t cyclen = (uint64_t(1) << L1_deg) + uint64_t(N1_req);
-        auto cyc1 = L1.generate_from_fill(1, cyclen);
-
-        CycleQueue<uint8_t> filling(L1_deg);
-
+        uint32_t curr_candidate = 1u;
+        auto generated_seq = L1.generate_from_fill(curr_candidate, cyclen);
         size_t R = 0;
-        uint64_t t = 0;
-        for (; t < L1_deg; ++t)
-            filling.push(cyc1[t]);
-        for (size_t i = 0; i < N1_req; ++i)
-            R += size_t(cyc1.at(t) ^ r_seq.at(t));
 
-        if (R < C1)
+        uint32_t insert_mask = 1 << (L1_deg - 1);
+
+        for (size_t j = 0; j < (uint64_t(1) << L1_deg); ++j)
         {
-            candidates.push_back({filling, R});
+            // Statuctuka
+            for (size_t i = 0; i < N1_req; ++i)
+                R += size_t(generated_seq.at(j + i) ^ r_seq.at(i));
+
+            // PereBiRka Kruteriyu
+            if (R < C1)
+                candidates.push_back({curr_candidate, R});
+
+            // Next kandudat
+            curr_candidate = (curr_candidate >> 1) ^ ((uint32_t)generated_seq[L1_deg + j] << insert_mask);
+
+            for(auto [c, r]: candidates)
+            {
+                std::cout << c << ' ' << r << std::endl;
+            }
         }
 
-        // uint8_t fill_next = cyc1.at(t); ???
-        size_t stat_diff = r_seq.at(0) ^ cyc1.at(0);
-        for (uint64_t i = 0; i < cyclen - N1_req; ++i)
-        {
-            filling.push(cyc1.at(i + L1_deg));
-            R = R - stat_diff + size_t(cyc1.at(i + N1_req) ^ r_seq.at(i + N));
-        }
+
     }
     std::cout << "L1 finished";
 
