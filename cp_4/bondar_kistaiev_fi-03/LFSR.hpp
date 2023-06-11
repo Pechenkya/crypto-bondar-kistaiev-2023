@@ -20,7 +20,7 @@ public:
 
 LFSR::LFSR(uint32_t recurv_coefs, uint8_t poly_deg) : max_bit_n{poly_deg - 1}, recurvia{recurv_coefs}
 {
-    __mask_for_bit_to_set = 1 << max_bit_n;
+    __mask_for_bit_to_set = (1 << max_bit_n);
 };
 
 std::vector<uint8_t> LFSR::generate_from_fill(uint32_t _filling, uint64_t length)

@@ -27,7 +27,7 @@ std::vector<uint8_t> Geffe::generate(uint32_t init_l1, uint32_t init_l2, uint32_
 
     for (int i = 0; i < lenght; ++i)
     {
-        if (S[i])
+        if (S[i] == uint8_t(1))
             res[i] = X[i];
         else
             res[i] = Y[i];
