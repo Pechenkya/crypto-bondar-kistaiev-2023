@@ -10,34 +10,44 @@ const std::string DEFAULT_STRING = "01101110110010000110100111111011101110110010
 // !WARNING: NOT MEMORY-EFFICIENT SOLUTION (Maksym)!
 int main()
 {
+    float aplha = 0.01;
+
     // Default complexity
-    // uint32_t L1_rec = (1 << 6) ^ (1 << 5) ^ (1 << 1) ^ 1;
+    // uint32_t L1_rec = (1u << 6) ^ (1u << 5) ^ (1u << 1) ^ 1u;
     // uint8_t L1_deg = 30;
-    // uint32_t L2_rec = (1 << 3) ^ 1;
+    // uint32_t L2_rec = (1u << 3) ^ 1u;
     // uint8_t L2_deg = 31;
-    // uint32_t L3_rec = (1 << 7) ^ (1 << 5) ^ (1 << 3) ^ (1 << 2) ^ (1 << 1) ^ 1;
+    // uint32_t L3_rec = (1u << 7) ^ (1u << 5) ^ (1u << 3) ^ (1u << 2) ^ (1u << 1) ^ 1u;
     // uint8_t L3_deg = 32;
-    // std::vector<uint8_t> cypher_text(DEFAULT_STRING.length());
-    // for (size_t i = 0; i < DEFAULT_STRING.length(); ++i)
+
+    // uint32_t N = DEFAULT_STRING.size();
+    // std::vector<uint8_t> r_seq(N);
+    // for (size_t i = 0; i < N; ++i)
     // {
-    //     cypher_text[i] = DEFAULT_STRING[i] - 48;
+    //     r_seq[i] = DEFAULT_STRING[i] - 48;
     // }
     //
 
     // Dummy complexity
-    uint32_t L1_rec = (1 << 3) ^ 1;
+    uint32_t L1_rec = (1u << 3) ^ 1;
     uint8_t L1_deg = 25;
-    uint32_t L2_rec = (1 << 6) ^ (1 << 2) ^ (1 << 1) ^ 1;
+    uint32_t L2_rec = (1u << 6) ^ (1u << 2) ^ (1u << 1) ^ 1u;
     uint8_t L2_deg = 26;
-    uint32_t L3_rec = (1 << 5) ^ (1 << 2) ^ (1 << 1) ^ 1;
+    uint32_t L3_rec = (1u << 5) ^ (1u << 2) ^ (1u << 1) ^ 1u;
     uint8_t L3_deg = 27;
 
-    std::vector<uint8_t> r_seq(DUMMY_STRING.length());
-    for (size_t i = 0; i < DUMMY_STRING.length(); ++i)
+    uint32_t N = DUMMY_STRING.size();
+    std::vector<uint8_t> r_seq(N);
+    for (size_t i = 0; i < N; ++i)
     {
         r_seq[i] = DUMMY_STRING[i] - 48;
     }
-    uint32_t N = r_seq.size();
+
+    uint32_t N1_req = 222;
+    uint32_t C1 = 71;
+    uint32_t N1_req = 229;
+    uint32_t C1 = 74;
+    //
 
     LFSR L1 = LFSR(L1_rec, L1_deg);
     LFSR L2 = LFSR(L2_rec, L2_deg);
@@ -46,38 +56,48 @@ int main()
     //----- L1 -----
     uint32_t best_fit_L1_fill = 0;
     {
-        uint64_t cyclen = (uint64_t(1) << 32) + uint64_t(N);
+        std::vector<std::pair<CycleQueue<uint8_t>, size_t>> candidates;
+
+        uint64_t cyclen = (uint64_t(1) << L1_deg) + uint64_t(N1_req);
         auto cyc1 = L1.generate_from_fill(1, cyclen);
+
         CycleQueue<uint8_t> filling(L1_deg);
+
         size_t R = 0;
         uint64_t t = 0;
         for (; t < L1_deg; ++t)
-            filling.push(cyc1.at(t));
-        for (size_t i = 0; i < N; ++i)
+            filling.push(cyc1[t]);
+        for (size_t i = 0; i < N1_req; ++i)
             R += size_t(cyc1.at(t) ^ r_seq.at(t));
 
-        std::vector<std::pair<CycleQueue<uint8_t>, size_t>> top10(10, {filling, R});
+        if (R < C1)
+        {
+            candidates.push_back({filling, R});
+        }
 
         // uint8_t fill_next = cyc1.at(t); ???
         size_t stat_diff = r_seq.at(0) ^ cyc1.at(0);
-        for (uint64_t i = 0; i < cyclen - N; ++i)
+        for (uint64_t i = 0; i < cyclen - N1_req; ++i)
         {
             filling.push(cyc1.at(i + L1_deg));
-            R = R - stat_diff + size_t(cyc1.at(i + N) ^ r_seq.at(i + N))
+            R = R - stat_diff + size_t(cyc1.at(i + N1_req) ^ r_seq.at(i + N));
         }
     }
+    std::cout << "L1 finished";
 
     //----- L2 -----
     uint32_t best_fit_L2_fill = 0;
     {
         // for (uint64_t i = 0)
     }
+    std::cout << "L2 finished";
 
     //----- L3 -----
     uint32_t best_fit_L3_fill = 0;
     {
         // for (uint64_t i = 0)
     }
+    std::cout << "L3 finished";
 
     // Geffe generator
     Geffe generator(L1, L2, L3);

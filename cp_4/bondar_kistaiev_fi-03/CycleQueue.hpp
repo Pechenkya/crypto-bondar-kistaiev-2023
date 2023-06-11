@@ -6,7 +6,7 @@ class CycleQueue
 {
 private:
     std::vector<T> quque;
-    size_t beg_pos = 0;
+    size_t insert_p = 0;
     size_t s;
 
 public:
@@ -14,8 +14,8 @@ public:
 
     void push(T a)
     {
-        quque.at(beg_pos) = a;
-        beg_pos = (beg_pos + 1) % s;
+        quque.at(insert_p) = a;
+        insert_p = (insert_p + 1) % s;
     }
 
     T at(size_t pos) { return quque.at(pos); }
