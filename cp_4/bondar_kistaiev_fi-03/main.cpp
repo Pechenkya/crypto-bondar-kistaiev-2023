@@ -16,45 +16,45 @@ int main()
     auto start = std::chrono::high_resolution_clock::now();
 
     // Default complexity
-    uint32_t L1_rec = (1u << 6) ^ (1u << 5) ^ (1u << 1) ^ 1u;
-    constexpr uint8_t L1_deg = 30;
-    uint32_t L2_rec = (1u << 3) ^ 1u;
-    constexpr uint8_t L2_deg = 31;
-    uint32_t L3_rec = (1u << 7) ^ (1u << 5) ^ (1u << 3) ^ (1u << 2) ^ (1u << 1) ^ 1u;
-    constexpr uint8_t L3_deg = 32;
+    // uint32_t L1_rec = (1u << 6) ^ (1u << 5) ^ (1u << 1) ^ 1u;
+    // constexpr uint8_t L1_deg = 30;
+    // uint32_t L2_rec = (1u << 3) ^ 1u;
+    // constexpr uint8_t L2_deg = 31;
+    // uint32_t L3_rec = (1u << 7) ^ (1u << 5) ^ (1u << 3) ^ (1u << 2) ^ (1u << 1) ^ 1u;
+    // constexpr uint8_t L3_deg = 32;
 
-    uint32_t N = DEFAULT_STRING.size();
-    std::vector<uint8_t> r_seq(N);
-    for (size_t i = 0; i < N; ++i)
-    {
-        r_seq[i] = DEFAULT_STRING[i] - 48;
-    }
-
-    uint32_t N1_req = 258;
-    uint32_t C1 = 81;
-    uint32_t N2_req = 265;
-    uint32_t C2 = 84;
-    //
-
-    // Dummy complexity
-    // uint32_t L1_rec = ((1u << 3) ^ 1);
-    // constexpr uint8_t L1_deg = 25;
-    // uint32_t L2_rec = ((1u << 6) ^ (1u << 2) ^ (1u << 1) ^ 1u);
-    // constexpr uint8_t L2_deg = 26;
-    // uint32_t L3_rec = ((1u << 5) ^ (1u << 2) ^ (1u << 1) ^ 1u);
-    // constexpr uint8_t L3_deg = 27;
-
-    // uint32_t N = DUMMY_STRING.size();
+    // uint32_t N = DEFAULT_STRING.size();
     // std::vector<uint8_t> r_seq(N);
     // for (size_t i = 0; i < N; ++i)
     // {
-    //     r_seq[i] = DUMMY_STRING[i] - 48;
+    //     r_seq[i] = DEFAULT_STRING[i] - 48;
     // }
 
-    // uint32_t N1_req = 222;
-    // uint32_t C1 = 71;
-    // uint32_t N2_req = 229;
-    // uint32_t C2 = 74;
+    // uint32_t N1_req = 258;
+    // uint32_t C1 = 83;
+    // uint32_t N2_req = 265;
+    // uint32_t C2 = 81;
+    //
+
+    // Dummy complexity
+    uint32_t L1_rec = ((1u << 3) ^ 1);
+    constexpr uint8_t L1_deg = 25;
+    uint32_t L2_rec = ((1u << 6) ^ (1u << 2) ^ (1u << 1) ^ 1u);
+    constexpr uint8_t L2_deg = 26;
+    uint32_t L3_rec = ((1u << 5) ^ (1u << 2) ^ (1u << 1) ^ 1u);
+    constexpr uint8_t L3_deg = 27;
+
+    uint32_t N = DUMMY_STRING.size();
+    std::vector<uint8_t> r_seq(N);
+    for (size_t i = 0; i < N; ++i)
+    {
+        r_seq[i] = DUMMY_STRING[i] - 48;
+    }
+
+    uint32_t N1_req = 222;
+    uint32_t C1 = 71;
+    uint32_t N2_req = 229;
+    uint32_t C2 = 74;
     //
 
     LFSR L1 = LFSR(L1_rec, L1_deg);
